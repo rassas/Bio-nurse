@@ -1,0 +1,59 @@
+<div class="container">
+  <div id="myDiv" style="width: 100%; height: 400px;"><!-- Plotly chart will be drawn inside this DIV --></div>
+</div>
+
+<div class="container">
+  <div class="table-responsive">
+    <table class="table" style="color: #FFF;">
+      <thead>
+        <tr>
+          <th>Battement de coeur</th>
+          <th>Température</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @cart.datums.each do |datum| %>
+          <tr>
+            <td><%= datum.temperature_level.val %></td>
+            <td><%= datum.heart_beat.val %></td>
+            <td><%= datum.created_at.strftime("%a %b %e %Y %T") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  var x_temperature = [];
+  var y_temperature = [];
+  var x_heat = [];
+  var y_heart = [];
+  
+  <% @cart.datums.each_with_index do |datum, index| %>
+    x_temperature.push("<%= datum.created_at.strftime("%a %b %e %Y %T") %>");
+    y_temperature.push(<%= datum.temperature_level.val %>);
+    y_heart.push(<%= datum.heart_beat.val %>)
+  <% end %>
+  var temperature = {
+    x: x_temperature, 
+    y: y_temperature,
+    name: 'Temperature',
+    type: 'scatter'
+  };
+  var heart = {
+    x: x_temperature, 
+    y: y_heart,
+    name: 'Coeur',
+    type: 'scatter'
+  };
+  var layout = {       // set the y axis title
+      xaxis: {
+        showgrid: false,                  // remove the x-axis grid lines
+        tickformat: "%B, %Y"              // customize the date format to "month, day"
+      }
+    };
+  var data = [temperature, heart];
+  Plotly.newPlot('myDiv', data, layout);
+</script>

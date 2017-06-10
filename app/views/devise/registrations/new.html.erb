@@ -1,0 +1,213 @@
+<div class="container credentials-page">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title text-center">Inscription</h3>
+        </div>
+        <div class="panel-body">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+              <%= devise_error_messages! %>
+              <fieldset>
+                <div class="form-group">
+                  <%= f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'Email', :required => true %>
+                </div>
+                <div class="form-group">
+                  <%= f.text_field :username, autofocus: true, :class => 'form-control', :placeholder => 'Username', :required => true %>
+                </div>
+
+                <div class="form-group col-md-6" style="padding: 0px; padding-right: 5px;">
+                  <label>Prénom</label>
+                  <%= f.text_field :first_name, :class => 'form-control', :required => true %>
+                </div>
+
+                <div class="form-group col-md-6" style="padding: 0px; padding-right: 5px;">
+                  <label>Nom</label>
+                  <%= f.text_field :last_name, :class => 'form-control', :required => true %>
+                </div>
+
+                <div class="form-group">
+                  <label>Date de naissance</label>
+                  <%= f.text_field :birthdate, :class => 'form-control datepicker', :required => true, 'data-provide' => 'datepicker', :placeholder => 'dd-mm-yyyy' %>
+                  <%#= f.date_field :birthday, :class =>'form-control', :required => true %>
+                </div>
+
+                <div class="form-group">
+
+                  <label>Image de profil</label>
+                  <%= f.attachment_field :avatar, :required => true %>
+                </div>
+
+                <div class="form-group">
+                  <p id="password-strength-text"></p>
+                  <%= f.password_field :password, autocomplete: "off", :class => "form-control", :placeholder => 'Mot de passe', :required => true %>
+                  <meter max="4" id="password-strength-meter"></meter>
+
+                </div>
+
+                <div class="form-group">
+                  <%= f.password_field :password_confirmation, autocomplete: "off", :class => "form-control", :placeholder => 'Confirmation de mot de passe', :required => true %>
+                </div>
+                <input class="btn btn-registration" type="submit" value="Inscription">
+              </fieldset>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+  $('#region').hide();
+  $('#province').hide();
+  $('#etat').hide();
+
+  $('#country_id').change(function () {
+    if ($('#country_id').val() == '233') {
+      $('#region').show();
+      $('#etat').show();
+      $('#province').hide();
+      $('#region_id option').each(function (i, e) {
+        if ($(e).data("country") == '233') {
+          $(e).show();
+        }
+        else {
+          $(e).hide();
+        }
+      });
+    } else if ($('#country_id').val() == '48') {
+      $('#region').show();
+      $('#etat').hide();
+      $('#province').show();
+      $('#region_id option').each(function (i, e) {
+        if ($(e).data("country") == '48') {
+          $(e).show();
+        }
+        else {
+          $(e).hide();
+        }
+      });
+    } else if ($('#country_id').val() == '105') {
+      $('#region').show();
+      $('#etat').hide();
+      $('#province').show();
+      $('#region_id option').each(function (i, e) {
+        if ($(e).data("country") == '105') {
+          $(e).show();
+        }
+        else {
+          $(e).hide();
+        }
+      });
+    }
+    else {
+      $('#region').hide();
+    }
+
+
+  });
+
+
+  $('#user_birthday').change(function () {
+    if (getAge($('#user_birthday').val()) < 18) {
+      $("#user_authorization").prop('required', true);
+    } else {
+      $("#user_authorization").prop('required', false);
+    }
+  });
+
+
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+</script>
+<script type="text/javascript" charset="utf-8">
+  var strength = {
+    0: "Worst",
+    1: "Bad",
+    2: "Weak",
+    3: "Good",
+    4: "Strong"
+  };
+  var password = document.getElementById('user_password');
+  var meter = document.getElementById('password-strength-meter');
+  var text = document.getElementById('password-strength-text');
+
+  password.addEventListener('input', function () {
+    var val = password.value;
+    var result = zxcvbn(val);
+
+    // Update the password strength meter
+    meter.value = result.score;
+
+    // Update the text indicator
+    if (val !== "") {
+      text.innerHTML = "Strength: " + strength[result.score];
+    } else {
+      text.innerHTML = "";
+    }
+  });
+
+  $(document).ready(function () {
+    $.datepicker.setDefaults($.datepicker.regional[locale]);
+    $('#user_birthday').datepicker({dateFormat: 'dd-mm-yy', changeYear: true, pickTime: false, yearRange: "-50:+0"});
+  });
+
+  function formatBytes(bytes, decimals) {
+    if (bytes == 0) return '0 Byte';
+    var k = 1000;
+    var dm = decimals + 1 || 3;
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    var i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+  $('#user_avatar').on('change', function (e) {
+    $('#error_avatar').css('display', 'none');
+    var data = e.originalEvent.target.files[0];
+
+    //console.log(formatBytes(data.size) + "is my file's size");
+
+    if (data.size > 4000000) {
+      $('#error_avatar').css('display', 'block');
+
+      $('#user_avatar').val("");
+    }
+  });
+
+  $('#user_cin').on('change', function (e) {
+
+    $('#error_cin').css('display', 'none');
+    var data = e.originalEvent.target.files[0];
+    //console.log(formatBytes(data.size) + "is my file's size");
+    if (data.size > 4000000) {
+      $('#error_cin').css('display', 'block');
+      $('#user_avatar').val("");
+    }
+  });
+
+  $('#user_authorization').on('change', function (e) {
+
+    $('#error_auth').css('display', 'none');
+
+    var data = e.originalEvent.target.files[0];
+
+    //console.log(formatBytes(data.size) + "is my file's size");
+
+    if (data.size > 4000000) {
+
+      $('#error_auth').css('display', 'block');
+
+      $('#user_avatar').val("");
+    }
+  });
+</script>
