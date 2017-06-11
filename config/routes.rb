@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  post 'cart' => 'cart#create'
+  get 'cart' => 'cart#create'
   get '/carts/:id' => 'cart#show'
   devise_for :users
   resources :users
