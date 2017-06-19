@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root to: 'home#home'
+
   get 'cart' => 'cart#create'
   get '/carts/:id' => 'cart#show'
   devise_for :users

@@ -1,0 +1,82 @@
+
+<div class="container">
+
+  <div class="landing-banner">
+
+    <div class="jumbotron text-center home-jumbotron lead">
+      <h1 class="lead"><span>BioNurse</span></h1>
+      <h2 class="lead"><span>L’objectif du processus de l’étude détaillée est de construire, à partir des spécifications des besoins obtenus par la phase d’analyse, une conception informelle.</span></h2>
+      <h2 class="lead"><span>Il s’agit donc de représenter notre système graphiquement suivant le langage de modélisation choisit.</span></h2>
+      <h2 class="lead"><span>Le résultat de cette étape guide l’implémentation de la solution, d’où son importance.</span></h2>
+      <h2 class="lead"><span>Dispositif ou appareil de soins qui mesure la température et les pulsions de cœur par minute et les transferer régulièrement à l’application web.</span></h2>
+      <h2 class="lead"><span>Partie web traitant les comptes des utilisateurs (Médecins) et sauvegarde les données provenant de l’appareil.</span></h2>
+    </div>
+
+  </div>
+
+  <% if user_signed_in? %>
+    <div class="games-list">
+
+      <div class="game-title">
+        <div class="row">
+
+        </div>
+      </div>
+
+      <%#= render 'widgets/other_games' %>
+
+
+      <div class="list-container fade-in">
+        <% @carts.each_with_index do |cart, index| %>
+            <div class="game-bg-container col-xs-12 col-sm-6 col-md-4">
+              <a href="/carts/<%= cart.id %>" class="image">
+
+                <div class="card-game-image fade-in" style="background-image: url(<%#= attachment_url(game, :image, :fill, 640, 296, format: "jpg") %>);">
+
+                  <div class="details-container">
+                    <div style="position: absolute;margin: auto;left: 0;right: 0;top: 0;width: 35px;height: 95px;bottom: 0;font-size: 60px;">
+                      <%= index + 1 %>
+                    </div>
+                    <div class="goto">
+                      <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="name">
+                      <%= cart.address_mac %>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </a>
+
+
+            </div>
+        <% end %>
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="clearfix">
+      </div>
+
+    </div>
+  <% end %>
+
+
+</div>
+
